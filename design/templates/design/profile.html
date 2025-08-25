@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ user.username }}!</h2>
+<p>Email: {{ user.email }}</p>
+
+<h3>Your Votes</h3>
+<ul>
+    {% for vote in votes %}
+        <li>{{ vote.candidate.name }} ({{ vote.candidate.party }})</li>
+    {% empty %}
+        <li>You have not voted yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

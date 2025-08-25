@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>Welcome to the Online Voting System</h2>
+<p>This is a secure platform where you can:</p>
+<ul>
+    <li>Sign up and create your voter profile</li>
+    <li>Login and view candidates</li>
+    <li>Vote for your preferred candidate</li>
+    <li>Check real-time election results</li>
+</ul>
+
+{% if user.is_authenticated %}
+    <p>Welcome back, {{ user.username }}! 🎉</p>
+    <p><a href="{% url 'candidate_list' %}">View Candidates & Vote</a></p>  <!-- fixed -->
+    <p><a href="{% url 'results' %}">See Results</a></p>
+{% else %}
+    <p><a href="{% url 'signup' %}">Signup</a> or <a href="{% url 'login' %}">Login</a> to participate.</p>
+{% endif %}
+{% endblock %}

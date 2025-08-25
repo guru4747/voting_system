@@ -1,0 +1,10 @@
+<h1>Welcome to Online Voting System</h1>
+{% if user.is_authenticated %}
+  <p>Hello, {{ user.username }} | <a href="{% url 'logout' %}">Logout</a></p>
+  <a href="{% url 'candidates' %}">View Candidates</a><br>
+  <a href="{% url 'vote' %}">Cast Vote</a><br>
+  <a href="{% url 'results' %}">View Results</a>
+{% else %}
+  <a href="{% url 'login' %}">Login</a> | 
+  <a href="{% url 'signup' %}">Signup</a>
+{% endif %}
