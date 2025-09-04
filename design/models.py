@@ -27,7 +27,7 @@ class Election(models.Model):
 
 class Vote(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="votes")  
 
     def __str__(self):
         return f"{self.voter.user.username} → {self.candidate.name}"
