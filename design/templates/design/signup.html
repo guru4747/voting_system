@@ -3,11 +3,23 @@
 
 {% block content %}
 <div class="card shadow p-4">
-    <h3 class="mb-3 text-center">Create Account</h3>
+    <h3 class="mb-3 text-center">Signup</h3>
 
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field|capfirst }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
         <button type="submit" class="btn btn-success w-100">Signup</button>
     </form>
