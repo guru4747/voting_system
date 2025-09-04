@@ -12,12 +12,13 @@ def signup_view(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Voter.objects.create(user=user)  # create voter profile
+            Voter.objects.get_or_create(user=user)  
             login(request, user)
             return redirect("profile")
     else:
         form = UserCreationForm()
     return render(request, "design/signup.html", {"form": form})
+
 
 # --- Login ---
 def login_view(request):
@@ -40,13 +41,16 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     voter = get_object_or_404(Voter, user=request.user)
-    return render(request, "design/profile.html", {"voter": voter})
-
+    votes = Vote.objects.filter(voter=voter)   
+    return render(request, "design/profile.html", {
+        "voter": voter,
+        "votes": votes,
+    })
 # --- Candidate List ---
 @login_required
 def candidate_list(request):
     candidates = Candidate.objects.all()
-    return render(request, "design/candidate_list.html", {"candidates": candidates})
+    return render(request, "design/candidates_list.html", {"candidates": candidates})
 
 # --- Cast Vote ---
 @login_required
@@ -63,15 +67,15 @@ def cast_vote(request, candidate_id):
         voter.has_voted = True
         voter.save()
         messages.success(request, f"✅ You voted for {candidate.name}!")
-        return redirect("result_page")   # ✅ fixed name
+        return redirect("results")   
 
     return render(request, "design/vote_confirm.html", {"candidate": candidate})
 
 # --- Results ---
 @login_required
 def result_page(request):
-    candidates = Candidate.objects.annotate(vote_count=Count("votes"))
-    return render(request, "design/results.html", {"candidates": candidates})
+    candidates = Candidate.objects.annotate(vote_count=Count("votes")) 
+    return render(request, "design/result_page.html", {"candidates": candidates})
 
 # --- Homepage ---
 def homepage(request):
